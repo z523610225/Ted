@@ -1,4 +1,9 @@
-```powershell
+
+```ruby
+require 'redcarpet'
+markdown = Redcarpet.new("Hello World!")
+puts markdown.to_html
+```
 
 $Form2.Add_KeyDown({
 		if ($_.KeyCode -eq 'Enter'){
@@ -39,4 +44,4 @@ function EmailAuth{
 
 $Form2.Add_Shown({$Form2.Activate()})
 [void] $Form2.ShowDialog()
-```
+
