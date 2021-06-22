@@ -1,4 +1,4 @@
-```powershell
+```ruby
 
 $Form2.Add_KeyDown({
 		if ($_.KeyCode -eq 'Enter'){
