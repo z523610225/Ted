@@ -315,3 +315,24 @@ function sleepy_time {
 	[System.Windows.Forms.Application]::SetSuspendState($PowerState, $Force, $DisableWake);
 }
 
+#log 
+function Write-Log{ 
+    [CmdletBinding()] 
+    param ( 
+        [Parameter(Mandatory)] 
+        [string]$Message
+    ) 
+      
+    try { 
+        if (!(Test-Path -path ([System.IO.Path]::GetDirectoryName($LogFilePath)))) {
+            New-Item -ItemType Directory -Path ([System.IO.Path]::GetDirectoryName($LogFilePath))
+        }
+        $DateTime = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
+        Add-Content -Value "$DateTime - $Message" -Path $LogFilePath
+		$TextBox1.AppendText("$DateTime - $Message `r`n")
+    } 
+    catch { 
+        Write-Error $_.Exception.Message 
+    } 
+}
+
