@@ -24,6 +24,12 @@ function AnrSearch{
 	}
 }
 
+# Users how have not logged on for 90 days
+function NotLogon {
+	# CONSIDERATIONS - search base
+ 	Get-ADUser -Filter {enabled -eq $true} -Properties LastLogonDate | Where-Object {$_.LastLogonDate -lt (Get-Date).AddDays(-90)} | export-csv .\90days.csv -NoTypeInformation
+}
+
 # AD User information
 function GetBasic{
 	param([string]$Username)
