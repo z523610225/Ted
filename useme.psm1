@@ -306,3 +306,12 @@ $Members = (Get-ADUser -Identity tzhang -Properties MemberOf).MemberOf
 	}
 #>
 
+# put pc into sleep mode
+function sleepy_time {
+	Add-Type -AssemblyName System.Windows.Forms
+	$PowerState = [System.Windows.Forms.PowerState]::Suspend;
+	$Force = $false;
+	$DisableWake = $false;
+	[System.Windows.Forms.Application]::SetSuspendState($PowerState, $Force, $DisableWake);
+}
+
