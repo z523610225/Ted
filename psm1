@@ -1,4 +1,4 @@
-```ruby
+```powershell
 
 $Form2.Add_KeyDown({
 		if ($_.KeyCode -eq 'Enter'){
@@ -39,3 +39,4 @@ function EmailAuth{
 
 $Form2.Add_Shown({$Form2.Activate()})
 [void] $Form2.ShowDialog()
+```
