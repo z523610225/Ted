@@ -258,4 +258,51 @@ function GetLicenses{
 	# Get-PSSession | Remove-PSSession # in case there are sessions left open
 }
 
+# Send email based on AD group
+function Send-ToEmail{
+	param([string]$ActioningParty,[string]$SystemAccess)
+
+<# e.g. Hashtable for offboarding AR groups (send emails to actioning party)
+$ActioningParties = @{
+    "CN=SG - SnipeIT Active Users" = "ted.zhang@pexa.com.au"
+	"CN=AR_Slack" = "kelvin.liu@pexa.com.au"
+	"CN=AR_NECDS Wiki" = "Tegan.Lodge@pexa.com.au"
+	"CN=AR_PEXA PRD - Read Write" = "joshua.asuncion@pexa.com.au"
+	"CN=AR_Tableau (DashBoard)" = "Kate.Munckton@pexa.com.au"
+}
+#>
+    $message = new-object Net.Mail.MailMessage
+    $message.From = "itsd.mail@pexa.com.au"
+    $message.To.Add($ActioningParty)
+    $message.Subject = "Offboarding Ted Zhang's $SystemAccess Access"
+    $message.Body = "Ted Zhang is leaving PEXA, please remove his/her access to $SystemAccess"
+    # $attachment = New-Object Net.Mail.Attachment($attachmentpath)
+    # $message.Attachments.Add($attachment)
+    $smtp = new-object Net.Mail.SmtpClient("smtp.office365.com", "587")
+    $smtp.EnableSSL = $true;
+    $smtp.Credentials = New-Object System.Net.NetworkCredential($Username, $Password)
+    $smtp.send($message)
+    # write-host "Mail Sent" 
+    # $attachment.Dispose()
+ }
+
+<#
+$Members = (Get-ADUser -Identity tzhang -Properties MemberOf).MemberOf
+	ForEach($Member in $Members){
+		if($Member -notlike "*SnipeIT*" -and $Member -notlike "*CN=ar*"){
+		# if($Member -notlike "*SnipeIT*"){
+			# Remove-ADGroupMember -Identity $Member -Members $SAName -Confirm:$false
+			# Write-Log -Message "$($Member.split(',')[0]) SG removed"	
+			# $a = $($Member.split(',')[0])
+			Write-host "$($Member.split(',')[0]) SG removed"	
+			# $ActioningParties["$($Member.split(',')[0])"]
+		}
+		elseif ($ActioningParties.Containskey("$($Member.split(',')[0])")){
+			# $ActioningParties[$Member]
+			Write-host "yeah"
+			$SimpName = ($Member.split(',')[0]).split('=')[1]
+			Send-ToEmail $ActioningParties["$($Member.split(',')[0])"] $SimpName
+		}
+	}
+#>
 
